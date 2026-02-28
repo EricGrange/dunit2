@@ -13,8 +13,8 @@ function GetAppConfigDir(Global: Boolean = False): string;
 implementation
 
 uses
-  Windows
-  ,SysUtils
+  Winapi.Windows
+  ,System.SysUtils
   ;
 
 const

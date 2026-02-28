@@ -13,7 +13,7 @@
  * The Original Code is DUnit.
  *
  * The Initial Developers of the Original Code are Kent Beck, Erich Gamma,
- * and Juancarlo Añez.
+ * and Juancarlo Aï¿½ez.
  * Portions created The Initial Developers are Copyright (C) 1999-2000.
  * Portions created by The DUnit Group are Copyright (C) 2000-2008.
  * All rights reserved.
@@ -21,7 +21,7 @@
  * Contributor(s):
  * Kent Beck <kentbeck@csi.com>
  * Erich Gamma <Erich_Gamma@oti.com>
- * Juanco Añez <juanco@users.sourceforge.net>
+ * Juanco Aï¿½ez <juanco@users.sourceforge.net>
  * Chris Morris <chrismo@users.sourceforge.net>
  * Jeff Moore <JeffMoore@users.sourceforge.net>
  * Uberto Barbini <uberto@usa.net>
@@ -45,10 +45,10 @@ interface
 uses
 {$IFDEF CLR}  System.Reflection, System.Diagnostics, System.IO,{$ENDIF}
   TestFrameworkIfaces,
-  Classes,
-  SysUtils,
-{$IFNDEF CLR}  Graphics, {$ENDIF} // TBitmap
-  IniFiles;
+  System.Classes,
+  System.SysUtils,
+{$IFNDEF CLR}  Vcl.Graphics, {$ENDIF} // TBitmap
+  System.IniFiles;
 
 type
 {$IFDEF CLR}
@@ -370,7 +370,7 @@ type
 
     // NOTE: TBitmap type must be qualified below as Windows unit
     // (appears later in implementation uses clause) also defines this type
-    procedure CheckEquals(const expected, actual: Graphics.TBitmap;
+    procedure CheckEquals(const expected, actual: Vcl.Graphics.TBitmap;
                           const ErrorMsg: string= ''); overload;
     {$ENDIF}
 
@@ -631,7 +631,7 @@ uses
   {$IFDEF VER130}
     D5Support,
   {$ELSE}
-    StrUtils,
+    System.StrUtils,
   {$ENDIF}
   {$IFDEF FASTMM}
     FastMM4,
@@ -639,9 +639,9 @@ uses
 {$IFDEF JCL_STACK_TRACE}
   JclDebug,
 {$ENDIF}
-  TypInfo,
-  Windows,
-  Math,
+  System.TypInfo,
+  Winapi.Windows,
+  System.Math,
   ProjectsManagerIface,
   ProjectsManager,
   TestListenerIface,
@@ -1313,11 +1313,10 @@ begin
   LClass := AClass;
   while LClass <> nil do
   begin
-    asm
-      mov  EAX, [LClass]
-      mov  EAX,[EAX].vmtMethodTable { fetch pointer to method table }
-      mov  [table], EAX
-    end;
+    // Get pointer to method table from VMT
+    // Use PPointer and vmtMethodTable offset from System unit
+    table := PPointer(PByte(LClass) + vmtMethodTable)^;
+
     if table <> nil then
     begin
       AName  := Pointer(PAnsiChar(table) + 8);
@@ -3596,7 +3595,7 @@ end;
 
 // NOTE: TBitmap must be qualified below as Windows unit
 // (appears later in usues clause) redefines this type
-procedure TTestProc.CheckEquals(const expected, actual: Graphics.TBitmap;
+procedure TTestProc.CheckEquals(const expected, actual: Vcl.Graphics.TBitmap;
   const ErrorMsg: string);
 var
   pixelRowLength: integer;

@@ -9,7 +9,7 @@ unit XMLListener;
 interface
 
 uses
-  Contnrs
+  System.Contnrs
   ,TestFrameworkProxyIfaces
   {$IFDEF XDOM}
   ,xdom   // Chosen because it does not drag in any other units e.g. TComponent
@@ -77,8 +77,8 @@ type
 implementation
 uses
   TestFrameworkIfaces,
-  Classes,
-  SysUtils;
+  System.Classes,
+  System.SysUtils;
 
 const
   milliSecsToDays       = 1/86400000;

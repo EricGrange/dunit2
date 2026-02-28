@@ -5,8 +5,8 @@ interface
 {$I jedi.inc}   // used solely for delphi version definitions
 
 uses
-  Windows      // HKEY_CURRENT_USER
-  ,Classes     // TStrings
+  Winapi.Windows      // HKEY_CURRENT_USER
+  ,System.Classes     // TStrings
   ;
 
 const
@@ -18,9 +18,9 @@ function WriteWatchFile(const AFileName, ALineNumber: string): boolean;
 implementation
 
 uses
-  Registry     // TRegistry
-  ,IniFiles    // TIniFile
-  ,SysUtils    // FileExists
+  System.Win.Registry     // TRegistry
+  ,System.IniFiles    // TIniFile
+  ,System.SysUtils    // FileExists
   ;
 
 const
@@ -40,6 +40,7 @@ const
 {$IFDEF DELPHIX_SEATTLE} cRegPluginKey = 'SOFTWARE\DUnitTestInspector\DELPHIX_SEATTLE'; {$ENDIF}
 {$IFDEF DELPHIX_BERLIN} cRegPluginKey = 'SOFTWARE\DUnitTestInspector\DELPHIX_BERLIN'; {$ENDIF}
 {$IFDEF DELPHIX_TOKYO} cRegPluginKey = 'SOFTWARE\DUnitTestInspector\DELPHIX_TOKYO'; {$ENDIF}
+{$IFDEF DELPHI29} cRegPluginKey = 'SOFTWARE\DUnitTestInspector\DELPHI12'; {$ENDIF}
 
   cRegWatchFile = 'WatchFile';
   cWatchFileSection = 'FilesToOpen';

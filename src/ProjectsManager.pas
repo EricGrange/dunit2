@@ -13,7 +13,7 @@
  * The Original Code is DUnit.
  *
  * The Initial Developers of the Original Code are Kent Beck, Erich Gamma,
- * and Juancarlo Añez.
+ * and Juancarlo Aï¿½ez.
  * Portions created The Initial Developers are Copyright (C) 1999-2000.
  * Portions created by The DUnit Group are Copyright (C) 2000-2008.
  * All rights reserved.
@@ -21,7 +21,7 @@
  * Contributor(s):
  * Kent Beck <kentbeck@csi.com>
  * Erich Gamma <Erich_Gamma@oti.com>
- * Juanco Añez <juanco@users.sourceforge.net>
+ * Juanco Aï¿½ez <juanco@users.sourceforge.net>
  * Chris Morris <chrismo@users.sourceforge.net>
  * Jeff Moore <JeffMoore@users.sourceforge.net>
  * Uberto Barbini <uberto@usa.net>
@@ -40,12 +40,12 @@ unit ProjectsManager;
 interface
 
 uses
-  Classes,
+  System.Classes,
   ProjectsManagerIface,
   TestFrameworkIfaces,
   TestListenerIface,
-  IniFiles,
-  Registry;
+  System.IniFiles,
+  System.Win.Registry;
 
 type
 
@@ -85,8 +85,8 @@ type
 
 implementation
 uses
-  SysUtils,
-  Math,
+  System.SysUtils,
+  System.Math,
   {$IFDEF VER130}
     D5Support,
   {$ENDIF}

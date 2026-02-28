@@ -17,14 +17,14 @@
  * The Original Code is DUnit.
  *
  * The Initial Developers of the Original Code are Serge Beaumont
- * and Juancarlo Añez.
+ * and Juancarlo Aï¿½ez.
  * Portions created The Initial Developers are Copyright (C) 1999-2000.
  * Portions created by The DUnit Group are Copyright (C) 2000-2008.
  * All rights reserved.
  *
  * Contributor(s):
  * Serge Beaumont <beaumose@iquip.nl>
- * Juanco Añez <juanco@users.sourceforge.net>
+ * Juanco Aï¿½ez <juanco@users.sourceforge.net>
  * Uberto Barbini <uberto@usa.net>
  * Kris Golko <neuromancer@users.sourceforge.net>
  * Jon Bertrand <jonbsfnet@users.sourceforge.net>
@@ -40,11 +40,11 @@ interface
 
 uses
 {$IFDEF MSWINDOWS}
-  Windows,
-  Controls,
+  Winapi.Windows,
+  Vcl.Controls,
 {$ENDIF}
-  SysUtils,
-  Classes;
+  System.SysUtils,
+  System.Classes;
 
 
   // Control Names
@@ -328,7 +328,7 @@ begin
   end
   else
   begin
-    LWinControl := Controls.FindControl(AParentHwnd);
+    LWinControl := Vcl.Controls.FindControl(AParentHwnd);
     if LWinControl <> nil then
     begin
       // Find by VCL child control index
