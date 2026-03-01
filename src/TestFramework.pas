@@ -1319,7 +1319,11 @@ begin
 
     if table <> nil then
     begin
+      {$IFDEF CPU64}
+      AName  := Pointer(PAnsiChar(table) + 12);
+      {$ELSE}
       AName  := Pointer(PAnsiChar(table) + 8);
+      {$ENDIF}
       for i := 1 to table.count do
       begin
         // check if we've seen the method name
@@ -1333,7 +1337,11 @@ begin
           SetLength(FMethodNameList,length(FMethodNameList)+1);
           FMethodNameList[J] := string(AName^);
         end;
+        {$IFDEF CPU64}
+        AName := Pointer(PAnsiChar(AName) + length(AName^) + 11)
+        {$ELSE}
         AName := Pointer(PAnsiChar(AName) + length(AName^) + 7)
+        {$ENDIF}
       end;
     end;
     LClass := LClass.ClassParent;

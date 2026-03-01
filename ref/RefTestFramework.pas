@@ -13,7 +13,7 @@
  * The Original Code is DUnit.
  *
  * The Initial Developers of the Original Code are Kent Beck, Erich Gamma,
- * and Juancarlo Añez.
+ * and Juancarlo AÃ±ez.
  * Portions created The Initial Developers are Copyright (C) 1999-2000.
  * Portions created by The DUnit Group are Copyright (C) 2000-2008.
  * All rights reserved.
@@ -21,7 +21,7 @@
  * Contributor(s):
  * Kent Beck <kentbeck@csi.com>
  * Erich Gamma <Erich_Gamma@oti.com>
- * Juanco Añez <juanco@users.sourceforge.net>
+ * Juanco AÃ±ez <juanco@users.sourceforge.net>
  * Chris Morris <chrismo@users.sourceforge.net>
  * Jeff Moore <JeffMoore@users.sourceforge.net>
  * Uberto Barbini <uberto@usa.net>
@@ -1305,14 +1305,22 @@ begin
   LClass := AClass;
   while LClass <> nil do
   begin
+    {$IFDEF CPU64}
+    table := PPointer(PByte(LClass) + vmtMethodTable)^;
+    {$ELSE}
     asm
       mov  EAX, [LClass]
       mov  EAX,[EAX].vmtMethodTable { fetch pointer to method table }
       mov  [table], EAX
     end;
+    {$ENDIF}
     if table <> nil then
     begin
+      {$IFDEF CPU64}
+      AName  := Pointer(PAnsiChar(table) + 12);
+      {$ELSE}
       AName  := Pointer(PAnsiChar(table) + 8);
+      {$ENDIF}
       for i := 1 to table.count do
       begin
         // check if we've seen the method name
@@ -1326,7 +1334,11 @@ begin
           SetLength(FMethodNameList,length(FMethodNameList)+1);
           FMethodNameList[J] := string(AName^);
         end;
+        {$IFDEF CPU64}
+        AName := Pointer(PAnsiChar(AName) + length(AName^) + 11)
+        {$ELSE}
         AName := Pointer(PAnsiChar(AName) + length(AName^) + 7)
+        {$ENDIF}
       end;
     end;
     LClass := LClass.ClassParent;
