@@ -21,7 +21,7 @@ interface
 {
   Hidden Paths of Delphi 3, by Ray Lischner.
   Informant Press, 1997.
-  Copyright © 1997 Tempest Software, Inc.
+  Copyright ï¿½ 1997 Tempest Software, Inc.
 
   Expert utilities unit:
     notifier components:
@@ -36,7 +36,7 @@ interface
       ReplaceSelection
 }
 
-uses SysUtils, Classes, ToolsAPI;
+uses System.SysUtils, System.Classes, ToolsAPI;
 
 //{$I JEDI.inc}
 {$DEFINE DELPHI6_UP}
