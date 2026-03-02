@@ -1,4 +1,4 @@
-{  DUnit: An XTreme testing framework for Delphi programs. }
+﻿{  DUnit: An XTreme testing framework for Delphi programs. }
 (*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -1309,7 +1309,6 @@ begin
       FMethodNameList[L-1] := Methods[i].Name;
     end;
 {$ELSE}
-  table := nil;
   LClass := AClass;
   while LClass <> nil do
   begin

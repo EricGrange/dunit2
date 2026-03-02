@@ -1820,10 +1820,7 @@ end;
 
 procedure TGUITestRunner.AutoSaveActionExecute(Sender: TObject);
 begin
-  with AutoSaveAction do
-  begin
-    Checked := not Checked
-  end;
+  AutoSaveAction.Checked := not AutoSaveAction.Checked;
   AutoSaveConfiguration;
 end;
 
@@ -1832,17 +1829,14 @@ begin
   if FHoldOptions then
     Exit;
 
-   with ErrorBoxVisibleAction do
+   ErrorBoxVisibleAction.Checked := not ErrorBoxVisibleAction.Checked;
+   ErrorBoxSplitter.Visible := ErrorBoxVisibleAction.Checked;
+   ErrorBoxPanel.Visible    := ErrorBoxVisibleAction.Checked;
+   if ErrorBoxVisibleAction.Checked then
    begin
-     Checked := not Checked;
-     ErrorBoxSplitter.Visible := Checked;
-     ErrorBoxPanel.Visible    := Checked;
-     if Checked then
-     begin
-      // Solve bugs with Delphi4 resizing with constraints
-       ErrorBoxSplitter.Top := ErrorBoxPanel.Top-8;
-     end
-   end;
+    // Solve bugs with Delphi4 resizing with constraints
+     ErrorBoxSplitter.Top := ErrorBoxPanel.Top-8;
+   end
 end;
 
 function TGUITestRunner.FindMultiErrorSourceReference(const AString: string;
@@ -2143,9 +2137,8 @@ procedure TGUITestRunner.BreakOnFailuresActionExecute(Sender: TObject);
 begin
   if FHoldOptions then
     Exit;
-    
-  with BreakOnFailuresAction do
-    Checked := not Checked;
+
+  BreakOnFailuresAction.Checked := not BreakOnFailuresAction.Checked;
 end;
 
 procedure TGUITestRunner.FailIfNoChecksExecutedActionExecute(Sender: TObject);
@@ -2153,8 +2146,7 @@ begin
   if FHoldOptions then
     Exit;
 
-  with FailIfNoChecksExecutedAction do
-    Checked := not Checked;
+  FailIfNoChecksExecutedAction.Checked := not FailIfNoChecksExecutedAction.Checked;
 end;
 
 procedure TGUITestRunner.FailTestCaseIfMemoryLeakedActionExecute(Sender: TObject);
@@ -2162,8 +2154,7 @@ begin
   if FHoldOptions then
     Exit;
 
-  with FailTestCaseIfMemoryLeakedAction do
-    Checked := not Checked;
+  FailTestCaseIfMemoryLeakedAction.Checked := not FailTestCaseIfMemoryLeakedAction.Checked;
 end;
 
 procedure TGUITestRunner.ShowTestCasesWithRunTimePropertiesActionExecute(
@@ -2172,15 +2163,12 @@ begin
   if FHoldOptions then
     Exit;
 
-  with ShowTestCasesWithRunTimePropertiesAction do
+  ShowTestCasesWithRunTimePropertiesAction.Checked := not ShowTestCasesWithRunTimePropertiesAction.Checked;
+  PropertyOverrideToolButton.Down := ShowTestCasesWithRunTimePropertiesAction.Checked;
+  if ShowTestCasesWithRunTimePropertiesAction.Checked then
   begin
-    Checked := not Checked;
-    PropertyOverrideToolButton.Down := Checked;
-    if Checked then
-    begin
-      ShowOverriddenFailuresAction.Checked := False;
-      ShowEarlyExitedTestAction.Checked := False;
-    end;
+    ShowOverriddenFailuresAction.Checked := False;
+    ShowEarlyExitedTestAction.Checked := False;
   end;
 end;
 
@@ -2190,15 +2178,12 @@ begin
   if FHoldOptions then
     Exit;
 
-  with ShowOverriddenFailuresAction do
+  ShowOverriddenFailuresAction.Checked := not ShowOverriddenFailuresAction.Checked;
+  ShowOverriddenFailuresToolButton.Down := ShowOverriddenFailuresAction.Checked;
+  if ShowOverriddenFailuresAction.Checked then
   begin
-    Checked := not Checked;
-    ShowOverriddenFailuresToolButton.Down := Checked;
-    if Checked then
-    begin
-      ShowTestCasesWithRunTimePropertiesAction.Checked := False;
-      ShowEarlyExitedTestAction.Checked := False;
-    end;
+    ShowTestCasesWithRunTimePropertiesAction.Checked := False;
+    ShowEarlyExitedTestAction.Checked := False;
   end;
 end;
 
@@ -2219,24 +2204,18 @@ begin
   if FHoldOptions then
     Exit;
 
-  with ShowEarlyExitedTestAction do
+  ShowEarlyExitedTestAction.Checked := not ShowEarlyExitedTestAction.Checked;
+  if ShowEarlyExitedTestAction.Checked then
   begin
-    Checked := not Checked;
-    ShowEarlyExitedTestAction.Checked := Checked;
-    if Checked then
-    begin
-      ShowOverriddenFailuresAction.Checked := False;
-      ShowTestCasesWithRunTimePropertiesAction.Checked := False;
-    end;
+    ShowOverriddenFailuresAction.Checked := False;
+    ShowTestCasesWithRunTimePropertiesAction.Checked := False;
   end;
 end;
 
 procedure TGUITestRunner.ShowTestedNodeActionExecute(Sender: TObject);
 begin
-  with ShowTestedNodeAction do
-    Checked := not Checked;
+  ShowTestedNodeAction.Checked := not ShowTestedNodeAction.Checked;
 end;
-
 procedure TGUITestRunner.SetUpStateImages;
 begin
     TestTree.Images             := RunImages;
@@ -2317,8 +2296,7 @@ begin
   if FHoldOptions then
     Exit;
 
-  with UseRegistryAction do
-    Checked := not Checked;
+  UseRegistryAction.Checked := not UseRegistryAction.Checked;
 end;
 
 function TGUITestRunner.GetIniFile(const FileName: string) : tCustomIniFile;
@@ -2330,26 +2308,30 @@ begin
 end;
 
 procedure TGUITestRunner.LoadRegistryAction;
+var
+  Ini: TIniFile;
 begin
-  with TIniFile.Create(IniFileName) do
+  Ini := TIniFile.Create(IniFileName);
   try
-    UseRegistryAction.Checked := ReadBool(cnConfigIniSection,
+    UseRegistryAction.Checked := Ini.ReadBool(cnConfigIniSection,
       'UseRegistry', UseRegistryAction.Checked);
   finally
-    Free;
+    Ini.Free;
   end;
 end;
 
 procedure TGUITestRunner.SaveRegistryAction;
+var
+  Ini: TIniFile;
 begin
   if UseRegistryAction.Checked then
     DeleteFile(IniFileName);
 
-  with TIniFile.Create(IniFileName) do
+  Ini := TIniFile.Create(IniFileName);
   try
-    WriteBool(cnConfigIniSection, 'UseRegistry', UseRegistryAction.Checked);
+    Ini.WriteBool(cnConfigIniSection, 'UseRegistry', UseRegistryAction.Checked);
   finally
-    Free;
+    Ini.Free;
   end;
 end;
 
@@ -3078,29 +3060,27 @@ begin
 end;
 
 procedure TGUITestRunner.ScoreBarPaint(Sender: TObject);
-//var
-//  OldStyle: TBrushStyle;
+var
+  pb: TPaintBox;
 begin
-  with (Sender as TPaintBox) do
+  pb := Sender as TPaintBox;
+  pb.Canvas.Lock;
+  pb.Canvas.Brush.Color := clSilver;
+  pb.Canvas.Rectangle(0, 0, pb.Width, pb.Height);
+  pb.Canvas.Font.Color := clWhite;
+  if TotalTestsCount <> 0 then
   begin
-    Canvas.Lock;
-    Canvas.Brush.Color := clSilver;
-    Canvas.Rectangle(0, 0, Width, Height);
-    Canvas.Font.Color := clWhite;
-    if TotalTestsCount <> 0 then
-    begin
-      if Assigned(TestResult) and (TestResult.FailureCount + TestResult.ErrorCount = 0) then
-        barColor := clOK;
-      Canvas.Brush.Color := barColor;
-      Canvas.Rectangle(0, 0, round(barPosition / (barMax) * Width), Height);
-      { Only needed if we wanted to overlay text on the progress bar. }
+    if Assigned(TestResult) and (TestResult.FailureCount + TestResult.ErrorCount = 0) then
+      barColor := clOK;
+    pb.Canvas.Brush.Color := barColor;
+    pb.Canvas.Rectangle(0, 0, round(barPosition / (barMax) * pb.Width), pb.Height);
+    { Only needed if we wanted to overlay text on the progress bar. }
 //      OldStyle := Canvas.Brush.Style;
 //      Canvas.Brush.Style := bsClear;
 //      Canvas.Textout(10, 10,  msg);
 //      Canvas.Brush.Style := OldStyle;
-    end;
-    Canvas.UnLock;
   end;
+  pb.Canvas.UnLock;
 end;
 
 procedure TGUITestRunner.pmTestTreePopup(Sender: TObject);
@@ -3178,8 +3158,7 @@ begin
   if FHoldOptions then
     Exit;
 
-  with IgnoreMemoryLeakInSetUpTearDownAction do
-    Checked := not Checked;
+  IgnoreMemoryLeakInSetUpTearDownAction.Checked := not IgnoreMemoryLeakInSetUpTearDownAction.Checked;
 end;
 
 procedure TGUITestRunner.ReportMemoryLeakTypeOnShutdownActionExecute(
@@ -3188,58 +3167,49 @@ begin
   if FHoldOptions then
     Exit;
 
-  with ReportMemoryLeakTypeOnShutdownAction do
-  begin
   {$IFDEF FASTMM}
-    Checked := not Checked;
+    ReportMemoryLeakTypeOnShutdownAction.Checked := not ReportMemoryLeakTypeOnShutdownAction.Checked;
     {$IFNDEF VER150}  //ToDo: Make this hack to get Delphi 7 compiling more robust
-      ReportMemoryLeaksOnShutdown := Checked;
+      ReportMemoryLeaksOnShutdown := ReportMemoryLeakTypeOnShutdownAction.Checked;
     {$ENDIF}
   {$ELSE}
-    Checked := False;
+    ReportMemoryLeakTypeOnShutdownAction.Checked := False;
   {$ENDIF}
-  end;    // with
 end;
 
 procedure TGUITestRunner.FailIfNoChecksExecutedActionUpdate(
   Sender: TObject);
 begin
-  with CheckCheckedToolButton do
+  if FailIfNoChecksExecutedAction.Checked then
   begin
-    if FailIfNoChecksExecutedAction.Checked then
-    begin
-      ImageIndex := 13;
-      Hint := 'Checkless Test Detection enabled';
-      Down := True;
-    end
-    else
-    begin
-      ImageIndex := 14;
-      Hint := 'CheckLess Test Detection disabled';
-      Down := False;
-    end;
+    CheckCheckedToolButton.ImageIndex := 13;
+    CheckCheckedToolButton.Hint := 'Checkless Test Detection enabled';
+    CheckCheckedToolButton.Down := True;
+  end
+  else
+  begin
+    CheckCheckedToolButton.ImageIndex := 14;
+    CheckCheckedToolButton.Hint := 'CheckLess Test Detection disabled';
+    CheckCheckedToolButton.Down := False;
   end;
 end;
 
 procedure TGUITestRunner.FailTestCaseIfMemoryLeakedActionUpdate(
   Sender: TObject);
 begin
-  with CheckMemLeaksToolButton do
+  if FailTestCaseIfMemoryLeakedAction.Checked then
   begin
-    if FailTestCaseIfMemoryLeakedAction.Checked then
-    begin
-      ImageIndex := 11;
-      Hint := 'Memory Leak Detection enabled';
-      Down := True;
-      IgnoreMemoryLeakInSetUpTearDownAction.Enabled := True;
-    end
-    else
-    begin
-      ImageIndex := 12;
-      Hint := 'Memory Leak Detection disabled';
-      Down := False;
-      IgnoreMemoryLeakInSetUpTearDownAction.Checked := False;
-    end;
+    CheckMemLeaksToolButton.ImageIndex := 11;
+    CheckMemLeaksToolButton.Hint := 'Memory Leak Detection enabled';
+    CheckMemLeaksToolButton.Down := True;
+    IgnoreMemoryLeakInSetUpTearDownAction.Enabled := True;
+  end
+  else
+  begin
+    CheckMemLeaksToolButton.ImageIndex := 12;
+    CheckMemLeaksToolButton.Hint := 'Memory Leak Detection disabled';
+    CheckMemLeaksToolButton.Down := False;
+    IgnoreMemoryLeakInSetUpTearDownAction.Checked := False;
   end;
 end;
 
@@ -3260,45 +3230,38 @@ begin
   if FHoldOptions then
     Exit;
 
-  with InhibitSummaryLevelChecksAction do
-    Checked := not Checked;
+  InhibitSummaryLevelChecksAction.Checked := not InhibitSummaryLevelChecksAction.Checked;
 end;
 
 procedure TGUITestRunner.EnableWarningsActionUpdate(Sender: TObject);
 begin
-  with ShowWarnedTestToolButton do
+  if EnableWarningsAction.Checked then
   begin
-    if EnableWarningsAction.Checked then
-    begin
-      ImageIndex := 19;
-      Hint := 'Warnings enabled';
-      Down := True;
-    end
-    else
-    begin
-      ImageIndex := 18;
-      Hint := 'Warnings disabled';
-      Down := False;
-    end;
+    ShowWarnedTestToolButton.ImageIndex := 19;
+    ShowWarnedTestToolButton.Hint := 'Warnings enabled';
+    ShowWarnedTestToolButton.Down := True;
+  end
+  else
+  begin
+    ShowWarnedTestToolButton.ImageIndex := 18;
+    ShowWarnedTestToolButton.Hint := 'Warnings disabled';
+    ShowWarnedTestToolButton.Down := False;
   end;
 end;
 
 procedure TGUITestRunner.InhibitSummaryLevelChecksActionUpdate(Sender: TObject);
 begin
-  with InhibitSummaryLevelChecksToolButton do
+  if InhibitSummaryLevelChecksAction.Checked then
   begin
-    if InhibitSummaryLevelChecksAction.Checked then
-    begin
-      ImageIndex := 21;
-      Hint := 'Inhibit Summary Level Checking. All Checks active';
-      Down := True;
-    end
-    else
-    begin
-      ImageIndex := 20;
-      Hint := 'Summary Level Checking enabled. Following Checks skipped on pass';
-      Down := False;
-    end;
+    InhibitSummaryLevelChecksToolButton.ImageIndex := 21;
+    InhibitSummaryLevelChecksToolButton.Hint := 'Inhibit Summary Level Checking. All Checks active';
+    InhibitSummaryLevelChecksToolButton.Down := True;
+  end
+  else
+  begin
+    InhibitSummaryLevelChecksToolButton.ImageIndex := 20;
+    InhibitSummaryLevelChecksToolButton.Hint := 'Summary Level Checking enabled. Following Checks skipped on pass';
+    InhibitSummaryLevelChecksToolButton.Down := False;
   end;
 end;
 
@@ -3308,8 +3271,7 @@ begin
   if FHoldOptions then
     Exit;
 
-  with EnableWarningsAction do
-    Checked := not Checked;
+  EnableWarningsAction.Checked := not EnableWarningsAction.Checked;
 end;
 
 end.
